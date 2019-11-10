@@ -8,46 +8,51 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "order_history")
 public class HistoryBean {
+	
 	@Id
-	@Column(name = "booking_id")
+	@Column(name = "order_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int orderId;
-	
+
 	@Column(name = "hotel_id")
 	private int hotelId;
-	
+
 	@Column(name = "hotel_name")
+	@NotBlank(message = "Hotel name cannot be empty...")
 	private String hotelName;
-	
+
 	@Column(name = "room_id")
 	private int roomId;
-	
+
 	@Column(name = "user_id")
 	private int userId;
-	
+
 	@Column
 	private double amount;
-	
+
 	@Column(name = "payment_status")
+	@NotBlank(message = "Payment status cannot be empty...")
 	private String paymentStatus;
-	
+
 	@Column(name = "mode_of_payment")
+	@NotBlank(message = "Please select the mode of payment...")
 	private String modeOfPayment;
-	
-	@JsonFormat(pattern = "DD-MM-YYYY")
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "checkin_date")
 	private LocalDate checkinDate;
-	
-	@JsonFormat(pattern = "DD-MM-YYYY")
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "checkout_date")
 	private LocalDate checkoutDate;
-	
+
 	// Getters and Setters
 	public int getOrderId() {
 		return orderId;
@@ -128,5 +133,5 @@ public class HistoryBean {
 	public void setCheckoutDate(LocalDate checkoutDate) {
 		this.checkoutDate = checkoutDate;
 	}
-	
-}//End of Class
+
+}// End of Class

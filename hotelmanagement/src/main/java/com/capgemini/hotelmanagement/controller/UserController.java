@@ -13,19 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.hotelmanagement.beans.HotelResponse;
 import com.capgemini.hotelmanagement.beans.UserBean;
-import com.capgemini.hotelmanagement.service.UserService;
-
+import com.capgemini.hotelmanagement.service.UserServices;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "true")
+//To connect rest with angular
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
-
 	@Autowired
-	private UserService userService;
+	private UserServices userServices;
 
 	@PostMapping(path = "/registerUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public HotelResponse userRegistration(@Valid @RequestBody UserBean userBean) {
-		boolean registerUser = userService.userRegistration(userBean);
+		boolean registerUser = userServices.userRegistration(userBean);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (registerUser) {
 			hotelResponse.setStatusCode(201);
@@ -40,8 +39,9 @@ public class UserController {
 	}// userRegistration()
 
 	@PostMapping(path = "/userLogin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse UsersLogin(@RequestParam("email") String email, @RequestParam("password") String password) {
-		UserBean userLogin = userService.userLogin(email, password);
+	public HotelResponse UsersLogin(@Valid @RequestParam String email,
+			@Valid @RequestParam String password) {
+		UserBean userLogin = userServices.userLogin(email, password);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (userLogin != null) {
 			hotelResponse.setStatusCode(201);
@@ -57,9 +57,9 @@ public class UserController {
 	}// End of UserLogin()
 
 	@PostMapping(path = "/updatePassword")
-	public HotelResponse passwordUpdate(@RequestParam int userId, @RequestParam long phoneNumber,
-			@RequestParam String password) {
-		boolean isUpdated = userService.resetPassword(userId, phoneNumber, password);
+	public HotelResponse passwordUpdate(@Valid @RequestParam int userId, @Valid @RequestParam long phoneNumber,
+			@Valid @RequestParam String password) {
+		boolean isUpdated = userServices.resetPassword(userId, phoneNumber, password);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (isUpdated) {
 			hotelResponse.setStatusCode(201);
@@ -74,8 +74,8 @@ public class UserController {
 	}// End of passwordUpdate()
 
 	@PostMapping(path = "/updateProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse updateProfile(@RequestBody UserBean userBean) {
-		boolean isUpdated = userService.updateProfile(userBean);
+	public HotelResponse updateProfile(@Valid @RequestBody UserBean userBean) {
+		boolean isUpdated = userServices.updateProfile(userBean);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (isUpdated) {
 			hotelResponse.setStatusCode(201);
@@ -90,8 +90,8 @@ public class UserController {
 	}// End of updateProfile()
 
 	@GetMapping(path = "/showProfile")
-	public HotelResponse showProfile(@RequestParam int userId) {
-		UserBean userBean = userService.showProfile(userId);
+	public HotelResponse showProfile(@Valid @RequestParam int userId) {
+		UserBean userBean = userServices.showProfile(userId);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (userBean != null) {
 			hotelResponse.setStatusCode(201);
@@ -101,9 +101,8 @@ public class UserController {
 		} else {
 			hotelResponse.setStatusCode(401);
 			hotelResponse.setMessage("Failed");
-			hotelResponse.setDescription("Unable To Retrive Profile...");
+			hotelResponse.setDescription("Unable To Retrieve Profile...");
 		}
-		
 		return hotelResponse;
 	}// End of showProfile()
 }// End of Class

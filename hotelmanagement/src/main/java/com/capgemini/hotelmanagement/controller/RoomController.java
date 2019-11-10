@@ -2,6 +2,8 @@ package com.capgemini.hotelmanagement.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,19 +18,20 @@ import com.capgemini.hotelmanagement.beans.BookingInfoBean;
 import com.capgemini.hotelmanagement.beans.HistoryBean;
 import com.capgemini.hotelmanagement.beans.HotelResponse;
 import com.capgemini.hotelmanagement.beans.RoomBean;
-import com.capgemini.hotelmanagement.service.RoomService;
+import com.capgemini.hotelmanagement.service.RoomServices;
 
 @RestController
+//To connect rest with angular
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class RoomController {
 	@Autowired
-	private RoomService roomService;
+	private RoomServices roomServices;
 
 	@PostMapping(path = "/bookingRoom", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse userRegistration(@RequestBody BookingInfoBean bookingInfoBean) {
+	public HotelResponse userRegistration(@Valid @RequestBody BookingInfoBean bookingInfoBean) {
 		HotelResponse hotelResponse = new HotelResponse();
-		if (roomService.checkRoomStatus(bookingInfoBean.getRoomId())) {
-			boolean isBooked = roomService.bookHotelRoom(bookingInfoBean);
+		if (roomServices.checkRoomStatus(bookingInfoBean.getRoomId())) {
+			boolean isBooked = roomServices.bookHotelRoom(bookingInfoBean);
 			if (isBooked) {
 				hotelResponse.setStatusCode(201);
 				hotelResponse.setMessage("Success");
@@ -47,8 +50,8 @@ public class RoomController {
 	}// userRegistration()
 
 	@GetMapping(path = "/getAvailableRooms", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse showRooms(@RequestParam String roomType) {
-		List<RoomBean> roomList = roomService.showAvailableRoom(roomType);
+	public HotelResponse showRooms(@Valid @RequestParam String roomType) {
+		List<RoomBean> roomList = roomServices.showAvailableRoom(roomType);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (roomList != null) {
 			hotelResponse.setStatusCode(201);
@@ -64,8 +67,8 @@ public class RoomController {
 	}// End of showRooms()
 
 	@GetMapping(path = "/getBookedRecords")
-	public HotelResponse showBookingDetails(@RequestParam int userId) {
-		List<BookingInfoBean> bookingInfoList = roomService.showBooking(userId);
+	public HotelResponse showBookingDetails(@Valid @RequestParam int userId) {
+		List<BookingInfoBean> bookingInfoList = roomServices.showBooking(userId);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (bookingInfoList != null) {
 			hotelResponse.setStatusCode(201);
@@ -81,8 +84,8 @@ public class RoomController {
 	}// End of showBookingDetails()
 
 	@DeleteMapping(path = "/cancelBooking")
-	public HotelResponse cancelBooking(@RequestParam int bookingId) {
-		boolean isCancel = roomService.cancelBooking(bookingId);
+	public HotelResponse cancelBooking(@Valid @RequestParam int bookingId) {
+		boolean isCancel = roomServices.cancelBooking(bookingId);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (isCancel) {
 			hotelResponse.setStatusCode(201);
@@ -97,8 +100,8 @@ public class RoomController {
 	}// End of deleteBooking
 
 	@GetMapping(path = "/totalAmount")
-	public HotelResponse totalBill(@RequestParam int userId) {
-		double totalBill = roomService.totalBill(userId);
+	public HotelResponse totalBill(@Valid @RequestParam int userId) {
+		double totalBill = roomServices.totalBill(userId);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (totalBill > 0.0) {
 			hotelResponse.setStatusCode(201);
@@ -114,8 +117,8 @@ public class RoomController {
 	}// End of totalBill()
 
 	@GetMapping(path = "/showHistory")
-	public HotelResponse showHistory(@RequestParam int userId) {
-		List<HistoryBean> historyList = roomService.showHistory(userId);
+	public HotelResponse showHistory(@Valid @RequestParam int userId) {
+		List<HistoryBean> historyList = roomServices.showHistory(userId);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (historyList != null) {
 			hotelResponse.setStatusCode(201);
@@ -129,57 +132,5 @@ public class RoomController {
 		}
 		return hotelResponse;
 	}// End of showHistory()
-
-	@GetMapping(path = "/getAllRooms", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse showAllRooms() {
-		List<RoomBean> roomList = roomService.showAllRooms();
-		HotelResponse hotelResponse = new HotelResponse();
-		if (roomList != null) {
-			hotelResponse.setStatusCode(201);
-			hotelResponse.setMessage("Success");
-			hotelResponse.setRoomList(roomList);
-			hotelResponse.setDescription("Retrieve All Rooms.......");
-		} else {
-			hotelResponse.setStatusCode(401);
-			hotelResponse.setMessage("Failed");
-			hotelResponse.setDescription("No Room Records Found........");
-		}
-		return hotelResponse;
-	}// End of showAllRooms()
-
-	@PostMapping(path = "/addNewRoom", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse addNewRoom(@RequestBody RoomBean roomBean) {
-		HotelResponse hotelResponse = new HotelResponse();
-
-		boolean isRoomAdded = roomService.addNewRoom(roomBean);
-		if (isRoomAdded) {
-			hotelResponse.setStatusCode(201);
-			hotelResponse.setMessage("Success");
-			hotelResponse.setDescription("New Room Added Successfully.......");
-		} else {
-			hotelResponse.setStatusCode(401);
-			hotelResponse.setMessage("Failed");
-			hotelResponse.setDescription("Failed To Add New Room........");
-		}
-		return hotelResponse;
-	}// End of addNewRoom()
-	
-	@DeleteMapping(path = "/deleteRoom")
-	public HotelResponse deleteRoom(int roomId) {
-
-		boolean isDeleted = roomService.deleteRoom(roomId);
-		HotelResponse hotelResponse = new HotelResponse();
-
-		if (isDeleted) {
-			hotelResponse.setStatusCode(201);
-			hotelResponse.setMessage("Success");
-			hotelResponse.setDescription("Room Record Deleted.....");
-		} else {
-			hotelResponse.setStatusCode(401);
-			hotelResponse.setMessage("Failed");
-			hotelResponse.setDescription("Enable to Delete Room Record.....");
-		}
-		return hotelResponse;
-	}// End of deleteRoom()
 
 }// End of Class

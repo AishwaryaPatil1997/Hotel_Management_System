@@ -6,8 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
@@ -23,6 +25,7 @@ public class UserBean {
 	private String userName;
 
 	@Column
+	@NotBlank(message = "Email cannot be empty...")
 	@Pattern(regexp = "^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$", message = "Email should be valid...")
 //	@Email(message = "Email should be valid...")
 	private String email;
@@ -37,13 +40,16 @@ public class UserBean {
 	private String nationality;
 
 	@Column
-	@Pattern(regexp = "^(?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9])(?=\\S*?[^\\w\\*])\\S{8,}$", message = "Password should contain 1 lowercase character, 1 uppercase character, digits from 0-9, atleast one special character from '@#$%', minimum Length of password should be 8.")
+	@NotBlank(message = "Password cannot be empty...")
+	@Pattern(regexp = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20})", message = "Password should contain 1 lowercase character, 1 uppercase character, digits from 0-9, atleast one special character from '@#$%', minimum Length of password should be 8.")
 	private String password;
 
 	@Column
+	@NotBlank(message = "Gender cannot be empty...")
 	private String gender;
 
 	@Column(name = "user_type")
+	@NotBlank(message = "User type cannot be empty...")
 	private String userType;
 
 	// Getters and Setters

@@ -1,11 +1,11 @@
-package com.capgemini.hotelmanagement.service;
+package com.capgemini.hotelmanagement.dao;
 
 import java.util.List;
 
 import com.capgemini.hotelmanagement.beans.HotelBean;
 
-public interface HotelService {
-	
+public interface HotelDAO {
+
 	public List<HotelBean> showAllHotels();
 
 	public boolean updateHotelDetails(HotelBean hotelBean);

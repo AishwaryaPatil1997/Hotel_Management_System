@@ -2,28 +2,37 @@ package com.capgemini.hotelmanagement.beans;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class HotelResponse {
+	
 	private int statusCode;
 	private String message;
 	private String description;
-
 	private UserBean userBean;
 	private List<UserBean> userList;
 	private RoomBean roomBean;
 	private List<RoomBean> roomList;
-	private HotelBean hotelBean;
-	private List<HotelBean> hotelList;
-	private BookingInfoBean bookingInfoBean;
 	private List<BookingInfoBean> bookingInfoList;
 	private double totalAmount;
+	private HotelBean hotelBean;
+	private List<HotelBean> hotelList;
 	private List<HistoryBean> historyList;
+	private HttpStatus httpStatus;
 
-	// All getters and setters
-	private List<BookingInfoBean> bookingInfoBeanList;
+	public HotelResponse() {
+		
+	}
+	
+	public HotelResponse(String message, HttpStatus httpStatus) {
+		this.message = message;
+		this.httpStatus = httpStatus;
+	}
 
+	// Getters and Setters
 	public int getStatusCode() {
 		return statusCode;
 	}
@@ -80,38 +89,6 @@ public class HotelResponse {
 		this.roomList = roomList;
 	}
 
-	public HotelBean getHotelBean() {
-		return hotelBean;
-	}
-
-	public void setHotelBean(HotelBean hotelBean) {
-		this.hotelBean = hotelBean;
-	}
-
-	public List<HotelBean> getHotelList() {
-		return hotelList;
-	}
-
-	public void setHotelList(List<HotelBean> hotelList) {
-		this.hotelList = hotelList;
-	}
-
-	public BookingInfoBean getBookingInfoBean() {
-		return bookingInfoBean;
-	}
-
-	public void setBookingInfoBean(BookingInfoBean bookingInfoBean) {
-		this.bookingInfoBean = bookingInfoBean;
-	}
-
-	public List<BookingInfoBean> getBookingInfoBeanList() {
-		return bookingInfoBeanList;
-	}
-
-	public void setBookingInfoBeanList(List<BookingInfoBean> bookingInfoBeanList) {
-		this.bookingInfoBeanList = bookingInfoBeanList;
-	}
-
 	public List<BookingInfoBean> getBookingInfoList() {
 		return bookingInfoList;
 	}
@@ -128,6 +105,22 @@ public class HotelResponse {
 		this.totalAmount = totalAmount;
 	}
 
+	public HotelBean getHotelBean() {
+		return hotelBean;
+	}
+
+	public void setHotelBean(HotelBean hotelBean) {
+		this.hotelBean = hotelBean;
+	}
+
+	public List<HotelBean> getHotelList() {
+		return hotelList;
+	}
+
+	public void setHotelList(List<HotelBean> hotelList) {
+		this.hotelList = hotelList;
+	}
+
 	public List<HistoryBean> getHistoryList() {
 		return historyList;
 	}
@@ -136,4 +129,12 @@ public class HotelResponse {
 		this.historyList = historyList;
 	}
 
-}
+	public HttpStatus getHttpStatus() {
+		return httpStatus;
+	}
+
+	public void setHttpStatus(HttpStatus httpStatus) {
+		this.httpStatus = httpStatus;
+	}
+
+}// End of Class

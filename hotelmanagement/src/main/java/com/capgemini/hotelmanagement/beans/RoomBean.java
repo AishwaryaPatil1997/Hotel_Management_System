@@ -6,31 +6,36 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "room")
 public class RoomBean {
+	
 	@Id
 	@Column(name = "room_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int roomId;
-	
+
 	@Column(name = "room_rent")
 	private double roomRent;
-	
+
 	@Column(name = "room_type")
+	@NotBlank(message = "Please select the room type...")
 	private String roomType;
-	
+
 	@Column(name = "room_capacity")
+	@NotBlank(message = "Please select room capacity...")
 	private int roomCapacity;
-	
+
 	@Column(name = "room_status")
+	@NotBlank(message = "Room status can't be blank...")
 	private String roomStatus;
-	
+
 	@Column(name = "hotel_id")
 	private int hotelId;
-	
-	//Getters and Setters
+
+	// Getters and Setters
 	public int getRoomId() {
 		return roomId;
 	}
@@ -79,10 +84,4 @@ public class RoomBean {
 		this.hotelId = hotelId;
 	}
 
-	@Override
-	public String toString() {
-		return "Room [roomId=" + roomId + ", roomRent=" + roomRent + ", roomType=" + roomType + ", roomCapacity="
-				+ roomCapacity + ", roomStatus=" + roomStatus + ", hotelId=" + hotelId + "]";
-	}//End of toString()
-	
-}//End of Class
+}// End of Class
