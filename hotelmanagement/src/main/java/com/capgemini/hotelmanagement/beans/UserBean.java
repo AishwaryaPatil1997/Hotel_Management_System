@@ -8,6 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user")
 public class UserBean {
+
 	@Id
 	@Column(name = "user_id")
 	private int userId;
@@ -33,7 +34,7 @@ public class UserBean {
 	@Column(name = "user_type")
 	private String userType;
 
-	// Getters and Setters
+    //All getters and setters
 	public int getUserId() {
 		return userId;
 	}
@@ -97,4 +98,5 @@ public class UserBean {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
+
 }
