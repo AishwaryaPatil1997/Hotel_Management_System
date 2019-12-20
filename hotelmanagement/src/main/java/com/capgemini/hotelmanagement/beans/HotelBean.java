@@ -8,7 +8,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "hotel")
 public class HotelBean {
-	
 	@Id
 	@Column(name = "hotel_id")
 	private int hotelId;
@@ -38,5 +37,10 @@ public class HotelBean {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+	
+	@Override
+	public String toString() {
+		return "Hotel [hotelId=" + hotelId + ", hotelName=" + hotelName + ", location=" + location + "]";
+	}//End of toString()
 	
 }//End of Class

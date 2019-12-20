@@ -8,33 +8,32 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "booking_info")
 public class BookingInfoBean {
-	
 	@Id
 	@Column(name = "booking_id")
 	private int bookingId;
-
+	
 	@Column(name = "room_id")
 	private int roomId;
-
+	
 	@Column(name = "user_id")
 	private int userId;
-
+	
 	@Column
 	private double amount;
-
+	
 	@Column(name = "payment_status")
 	private String paymentStatus;
-
+	
 	@Column(name = "mode_of_payment")
 	private String modeOfPayment;
-
+	
 	@Column(name = "checkin_date")
 	private String checkinDate;
-
+	
 	@Column(name = "checkout_date")
 	private String checkoutDate;
-
-	// Getters and Setters
+	
+	//Getters and Setters
 	public int getBookingId() {
 		return bookingId;
 	}
@@ -99,4 +98,11 @@ public class BookingInfoBean {
 		this.checkoutDate = checkoutDate;
 	}
 
-}// End of Class
+	@Override
+	public String toString() {
+		return "BookingInfo [bookingId=" + bookingId + ", roomId=" + roomId + ", userId=" + userId + ", amount="
+				+ amount + ", paymentStatus=" + paymentStatus + ", modeOfPayment=" + modeOfPayment + ", checkinDate="
+				+ checkinDate + ", checkoutDate=" + checkoutDate + "]";
+	}//End of toString()
+	
+}//End of Class

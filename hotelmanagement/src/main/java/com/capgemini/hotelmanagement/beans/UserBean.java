@@ -2,39 +2,41 @@ package com.capgemini.hotelmanagement.beans;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "user")
 public class UserBean {
-	
 	@Id
 	@Column(name = "user_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int userId;
-
+	
 	@Column(name = "user_name")
 	private String userName;
-
+	
 	@Column
 	private String email;
-
+	
 	@Column(name = "phone_number")
 	private long phoneNumber;
-
+	
 	@Column
 	private String nationality;
-
+	
 	@Column
 	private String password;
-
+	
 	@Column
 	private String gender;
-
+	
 	@Column(name = "user_type")
 	private String userType;
-
-	// Getters and Setters
+	
+	//Getters and Setters
 	public int getUserId() {
 		return userId;
 	}
@@ -99,4 +101,4 @@ public class UserBean {
 		this.userType = userType;
 	}
 	
-}
+}//End of Class
