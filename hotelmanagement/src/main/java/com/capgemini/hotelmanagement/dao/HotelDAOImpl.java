@@ -1,166 +1,145 @@
 package com.capgemini.hotelmanagement.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
-import javax.transaction.Transaction;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.capgemini.hotelmanagement.beans.UserBean;
+import com.capgemini.hotelmanagement.beans.HotelBean;
 
 @Repository
 public class HotelDAOImpl implements HotelDAO {
-
-	@PersistenceUnit
+	
+	@Autowired
 	private EntityManagerFactory entityManagerFactory;
-
-	EntityManager entityManager;
-
-	@Override
-	public boolean userRegistration(UserBean userBean) {
-		entityManager = entityManagerFactory.createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		boolean isRegister = false;
-
-		try {
-			transaction.begin();
-			// Storing new user using persist
-			entityManager.persist(userBean);
-			transaction.commit();
-			isRegister = true;
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return isRegister;
-	}// End of userRegistration()
+	 EntityManager entityManager;
+	 EntityTransaction entityTransaction;  ///----
 
 	@Override
-	public UserBean userLogin(String email, String password) {
+	public List<HotelBean> showAllHotels() {
+		List<HotelBean> hotelList = null;
 		entityManager = entityManagerFactory.createEntityManager();
-		UserBean userBean = null;
-
-		String jpql = "FROM UserBean WHERE email =: email AND password =: password";
+		entityTransaction = entityManager.getTransaction();
+		String jpql = "from HotelBean";
 		Query query = entityManager.createQuery(jpql);
-		// setting paramters
-		query.setParameter("email", email);
-		query.setParameter("password", password);
-
 		try {
-			userBean = (UserBean) query.getSingleResult();
+			entityTransaction.begin();
+			hotelList = query.getResultList();
+			entityTransaction.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userBean;
-	}// End of userLogin()
+		return hotelList;
+	}
 
 	@Override
-	public boolean resetPassword(int userId, long phoneNumber, String password) {
-		entityManager = entityManagerFactory.createEntityManager();
-		EntityTransaction entityTransaction = entityManager.getTransaction();
+	public boolean updateHotelDetails(HotelBean hotelBean) {
 		boolean isUpdated = false;
+		entityManager = entityManagerFactory.createEntityManager();
+		entityTransaction = entityManager.getTransaction();
+		HotelBean hotelBean2 = entityManager.find(HotelBean.class, hotelBean.getHotelId());
 
-		try {
-			UserBean userBean = entityManager.find(UserBean.class, userId);
-			// Checking old password
+		if (hotelBean2 != null) {
+			String hotelName = hotelBean.getHotelName();
+			if (hotelName != null && !hotelName.isEmpty()) {
+				hotelBean2.setHotelName(hotelName);
+			}
 
-			String jpql = "UPDATE UserBean SET password =: password WHERE userId =: userId AND phoneNumber =: phoneNumber";
-			Query query = entityManager.createQuery(jpql);
-			query.setParameter("userId", userId);
-			query.setParameter("password", password);
-			query.setParameter("phoneNumber", phoneNumber);
-			entityTransaction.begin();
-			int count = query.executeUpdate();
-			if (count > 0) {
+			String location = hotelBean.getLocation();
+			if (location != null && !location.isEmpty()) {
+				hotelBean2.setHotelName(hotelName);
+			}
+
+			try {
+				entityTransaction.begin();
+				entityManager.persist(hotelBean2);
+				entityTransaction.commit();
 				isUpdated = true;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			entityTransaction.commit();
+			entityManager.close();
+		}
+		return isUpdated;
+	}
 
+	@Override
+	public HotelBean searchHotelDetails(String hotelName) {
+		HotelBean hotelBean = null;
+		entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		String jpql = "from HotelBean where hotelName like :hotelName";
+		Query query = entityManager.createQuery(jpql);
+		query.setParameter("hotelName", hotelName);
+		try {
+			entityTransaction.begin();
+
+			entityTransaction.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return isUpdated;
-	}// End of resetPassword()
+		return hotelBean;
+	}
 
 	@Override
-	public boolean updateProfile(UserBean userBean) {
+	public HotelBean getHotelDetails(int hotelId) {
+
 		entityManager = entityManagerFactory.createEntityManager();
-		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction = entityManager.getTransaction();
 
-		UserBean existingUser = entityManager.find(UserBean.class, userBean.getUserId());
-		boolean isUpdated = false;
-
-		if (existingUser != null) {
-			int userId = userBean.getUserId();
-			if (userId > 0) {
-				existingUser.setUserId(userId);
-			}
-
-			String userName = userBean.getUserName();
-			if (userName != null) {
-				existingUser.setUserName(userName);
-			}
-
-			String email = userBean.getEmail();
-			if (email != null) {
-				existingUser.setEmail(email);
-			}
-
-			long phoneNumber = userBean.getPhoneNumber();
-			if (phoneNumber != 0l) {
-				existingUser.setPhoneNumber(phoneNumber);
-			}
-
-			String nationality = userBean.getNationality();
-			if (nationality != null) {
-				existingUser.setNationality(nationality);
-			}
-
-			String password = userBean.getPassword();
-			if (password != null) {
-				existingUser.setPassword(password);
-			}
-
-			String gender = userBean.getGender();
-			if (gender != null) {
-				existingUser.setGender(gender);
-			}
-
-			String userType = userBean.getUserType();
-			if (userType != null) {
-				existingUser.setUserType(userType);
-			}
+		HotelBean hotelBean = null;
+		try {
+			entityTransaction.begin();
+			hotelBean = entityManager.find(HotelBean.class, hotelId);
+			entityTransaction.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		entityManager.close();
+		return hotelBean;
+	}
+
+	@Override
+	public boolean addHotelDetails(HotelBean hotelBean) {
+		boolean isHotelAdded = false;
+		entityManager = entityManagerFactory.createEntityManager();
+		entityTransaction = entityManager.getTransaction();
 
 		try {
 			entityTransaction.begin();
-			entityManager.persist(existingUser);
+			entityManager.persist(hotelBean);
 			entityTransaction.commit();
-			isUpdated = true;
+			isHotelAdded = true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return isUpdated;
-	}// End of updateProfile()
+		entityManager.close();
+		return isHotelAdded;
+	}
 
 	@Override
-	public UserBean showProfile(int userId) {
+	public boolean deleteHotelDetails(int hotelId) {
+		boolean isHotelDeleted = false;
 		entityManager = entityManagerFactory.createEntityManager();
-		UserBean userBean = null;
+
 		try {
-			String jpql = "FROM UserBean WHERE userId =: userId";
-			Query query = entityManager.createQuery(jpql);
-			query.setParameter("userId", userId);
-			// Getting single user Data
-			userBean = (UserBean) query.getSingleResult();
+			entityTransaction = entityManager.getTransaction();
+			entityTransaction.begin();
+			HotelBean hotelBean = entityManager.find(HotelBean.class, hotelId);
+			entityManager.remove(hotelBean);
+			entityTransaction.commit();
+			isHotelDeleted = true;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userBean;
-	}//End of showProfile()
-
-}// End of Class
+		entityManager.close();
+		return isHotelDeleted;
+	}
+}
