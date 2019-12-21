@@ -31,7 +31,7 @@ public class HotelDAOImpl implements HotelDAO {
 			entityManager.persist(userBean);
 			transaction.commit();
 			isRegister = true;
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -42,12 +42,13 @@ public class HotelDAOImpl implements HotelDAO {
 	public UserBean userLogin(String email, String password) {
 		entityManager = entityManagerFactory.createEntityManager();
 		UserBean userBean = null;
-		
+
 		String jpql = "FROM UserBean WHERE email =: email AND password =: password";
 		Query query = entityManager.createQuery(jpql);
+		// setting paramters
 		query.setParameter("email", email);
 		query.setParameter("password", password);
-		
+
 		try {
 			userBean = (UserBean) query.getSingleResult();
 		} catch (Exception e) {
@@ -59,30 +60,39 @@ public class HotelDAOImpl implements HotelDAO {
 	@Override
 	public boolean resetPassword(int userId, long phoneNumber, String password) {
 		entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 		boolean isUpdated = false;
-		
-		String jpql = "UPDATE UserBean SET password =: password WHERE userId =: userId AND phoneNumber =: phoneNumber";
-		Query query = entityManager.createQuery(jpql);
-		query.setParameter("userId", userId);
-		query.setParameter("password", password);
-		query.setParameter("phoneNumber", phoneNumber);
-		
+
 		try {
-			isUpdated = (boolean) query.getSingleResult();
+			UserBean userBean = entityManager.find(UserBean.class, userId);
+			// Checking old password
+
+			String jpql = "UPDATE UserBean SET password =: password WHERE userId =: userId AND phoneNumber =: phoneNumber";
+			Query query = entityManager.createQuery(jpql);
+			query.setParameter("userId", userId);
+			query.setParameter("password", password);
+			query.setParameter("phoneNumber", phoneNumber);
+			entityTransaction.begin();
+			int count = query.executeUpdate();
+			if (count > 0) {
+				isUpdated = true;
+			}
+			entityTransaction.commit();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return isUpdated;
-	}//End of resetPassword()
+	}// End of resetPassword()
 
 	@Override
 	public boolean updateProfile(UserBean userBean) {
 		entityManager = entityManagerFactory.createEntityManager();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
-		
+
 		UserBean existingUser = entityManager.find(UserBean.class, userBean.getUserId());
 		boolean isUpdated = false;
-		
+
 		if (existingUser != null) {
 			int userId = userBean.getUserId();
 			if (userId > 0) {
@@ -98,27 +108,27 @@ public class HotelDAOImpl implements HotelDAO {
 			if (email != null) {
 				existingUser.setEmail(email);
 			}
-			
+
 			long phoneNumber = userBean.getPhoneNumber();
 			if (phoneNumber != 0l) {
 				existingUser.setPhoneNumber(phoneNumber);
 			}
-			
+
 			String nationality = userBean.getNationality();
 			if (nationality != null) {
 				existingUser.setNationality(nationality);
 			}
-			
+
 			String password = userBean.getPassword();
 			if (password != null) {
 				existingUser.setPassword(password);
 			}
-			
+
 			String gender = userBean.getGender();
 			if (gender != null) {
 				existingUser.setGender(gender);
 			}
-			
+
 			String userType = userBean.getUserType();
 			if (userType != null) {
 				existingUser.setUserType(userType);
@@ -130,14 +140,27 @@ public class HotelDAOImpl implements HotelDAO {
 			entityManager.persist(existingUser);
 			entityTransaction.commit();
 			isUpdated = true;
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
-	}//End of updateProfile()
-	
-	
-	
+		return isUpdated;
+	}// End of updateProfile()
+
+	@Override
+	public UserBean showProfile(int userId) {
+		entityManager = entityManagerFactory.createEntityManager();
+		UserBean userBean = null;
+		try {
+			String jpql = "FROM UserBean WHERE userId =: userId";
+			Query query = entityManager.createQuery(jpql);
+			query.setParameter("userId", userId);
+			// Getting single user Data
+			userBean = (UserBean) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userBean;
+	}//End of showProfile()
 
 }// End of Class

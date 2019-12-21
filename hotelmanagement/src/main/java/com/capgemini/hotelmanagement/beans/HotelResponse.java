@@ -11,6 +11,10 @@ public class HotelResponse {
 	private String description;
 	private UserBean userBean;
 	private List<UserBean> userList;
+	private RoomBean roomBean;
+	private List<RoomBean> roomList;
+	private List<BookingInfoBean> bookingInfoList;
+	private double totalAmount;
 	
 	//Getters and Setters
 	public int getStatusCode() {
@@ -43,6 +47,30 @@ public class HotelResponse {
 	public void setUserList(List<UserBean> userList) {
 		this.userList = userList;
 	}
-	
+	public RoomBean getRoomBean() {
+		return roomBean;
+	}
+	public void setRoomBean(RoomBean roomBean) {
+		this.roomBean = roomBean;
+	}
+	public List<RoomBean> getRoomList() {
+		return roomList;
+	}
+	public void setRoomList(List<RoomBean> roomList) {
+		this.roomList = roomList;
+	}
+	public List<BookingInfoBean> getBookingInfoList() {
+		return bookingInfoList;
+	}
+	public void setBookingInfoList(List<BookingInfoBean> bookingInfoList) {
+		this.bookingInfoList = bookingInfoList;
+	}
+	public double getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
 
 }//End of Class

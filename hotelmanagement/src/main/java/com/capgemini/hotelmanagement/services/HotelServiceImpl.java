@@ -32,4 +32,9 @@ public class HotelServiceImpl implements HotelService {
 		return hotelDAO.updateProfile(userBean);
 	}
 
+	@Override
+	public UserBean showProfile(int userId) {
+		return hotelDAO.showProfile(userId);
+	}
+
 }//End of Class

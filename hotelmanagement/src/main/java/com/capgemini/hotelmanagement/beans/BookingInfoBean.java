@@ -1,15 +1,22 @@
 package com.capgemini.hotelmanagement.beans;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "booking_info")
 public class BookingInfoBean {
 	@Id
 	@Column(name = "booking_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int bookingId;
 	
 	@Column(name = "room_id")
@@ -27,13 +34,15 @@ public class BookingInfoBean {
 	@Column(name = "mode_of_payment")
 	private String modeOfPayment;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "checkin_date")
-	private String checkinDate;
+	private LocalDate checkinDate;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "checkout_date")
-	private String checkoutDate;
+	private LocalDate checkoutDate;
 	
-	//Getters and Setters
+	// Getters and Setters
 	public int getBookingId() {
 		return bookingId;
 	}
@@ -82,27 +91,23 @@ public class BookingInfoBean {
 		this.modeOfPayment = modeOfPayment;
 	}
 
-	public String getCheckinDate() {
+	public LocalDate getCheckinDate() {
 		return checkinDate;
 	}
 
-	public void setCheckinDate(String checkinDate) {
+	public void setCheckinDate(LocalDate checkinDate) {
 		this.checkinDate = checkinDate;
 	}
 
-	public String getCheckoutDate() {
+	public LocalDate getCheckoutDate() {
 		return checkoutDate;
 	}
 
-	public void setCheckoutDate(String checkoutDate) {
+	public void setCheckoutDate(LocalDate checkoutDate) {
 		this.checkoutDate = checkoutDate;
 	}
 
-	@Override
-	public String toString() {
-		return "BookingInfo [bookingId=" + bookingId + ", roomId=" + roomId + ", userId=" + userId + ", amount="
-				+ amount + ", paymentStatus=" + paymentStatus + ", modeOfPayment=" + modeOfPayment + ", checkinDate="
-				+ checkinDate + ", checkoutDate=" + checkoutDate + "]";
-	}//End of toString()
+	
+	
 	
 }//End of Class

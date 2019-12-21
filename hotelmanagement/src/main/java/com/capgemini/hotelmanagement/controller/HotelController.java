@@ -1,5 +1,7 @@
 package com.capgemini.hotelmanagement.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,7 +24,7 @@ public class HotelController {
 	private HotelService hotelService;
 	
 	@PostMapping(path = "/registerUser",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse userRegistration(@RequestBody UserBean userBean) {
+	public HotelResponse userRegistration(@Valid @RequestBody UserBean userBean) {
 		boolean registerUser = hotelService.userRegistration(userBean);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (registerUser) {
@@ -37,7 +39,7 @@ public class HotelController {
 		return hotelResponse;
 	}//userRegistration()
 	
-	@GetMapping(path = "/userLogin",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/userLogin",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 	public HotelResponse UsersLogin(@RequestParam("email") String email, @RequestParam("password") String password) {
 		UserBean userLogin = hotelService.userLogin(email, password);
 		HotelResponse hotelResponse = new HotelResponse();
@@ -55,7 +57,7 @@ public class HotelController {
 	}//End of UserLogin()
 	
 	@PostMapping(path = "/updatePassword")
-	public HotelResponse passwordUpdate(@RequestBody int userId, long phoneNumber, String password) {
+	public HotelResponse passwordUpdate(@RequestParam int userId, @RequestParam long phoneNumber, @RequestParam String password) {
 		boolean isUpdated = hotelService.resetPassword(userId, phoneNumber, password);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (isUpdated) {
@@ -70,7 +72,7 @@ public class HotelController {
 		return hotelResponse;	
 	}//End of passwordUpdate()
 	
-	@PostMapping(path = "/updateProfile")
+	@PostMapping(path = "/updateProfile",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 	public HotelResponse updateProfile(@RequestBody UserBean userBean) {
 		boolean isUpdated = hotelService.updateProfile(userBean);
 		HotelResponse hotelResponse = new HotelResponse();
@@ -86,5 +88,19 @@ public class HotelController {
 		return hotelResponse;
 	}//End of updateProfile()
 	
-	
+	public HotelResponse showProfile(@RequestParam int userId) {
+		UserBean userBean = hotelService.showProfile(userId);
+		HotelResponse hotelResponse = new HotelResponse();
+		if (userBean != null) {
+			hotelResponse.setStatusCode(201);
+			hotelResponse.setMessage("Success");
+			hotelResponse.setUserBean(userBean);
+			hotelResponse.setDescription("Profile Retrived Successfully...");
+		} else {
+			hotelResponse.setStatusCode(401);
+			hotelResponse.setMessage("Failed");
+			hotelResponse.setDescription("Unable To Retrive Profile...");
+		}
+		return hotelResponse;
+	}//End of showProfile()
 }//End of Class

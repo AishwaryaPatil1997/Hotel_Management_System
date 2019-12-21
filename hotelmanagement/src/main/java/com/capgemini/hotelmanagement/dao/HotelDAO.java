@@ -10,4 +10,6 @@ public interface HotelDAO {
 	public boolean resetPassword(int userId, long phoneNumber, String password);
 	
 	public boolean updateProfile(UserBean userBean);
+	
+	public UserBean showProfile(int userId);
 }// End of interface
