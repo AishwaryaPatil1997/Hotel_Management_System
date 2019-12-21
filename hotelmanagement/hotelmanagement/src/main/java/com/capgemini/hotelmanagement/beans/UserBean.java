@@ -8,33 +8,30 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user")
 public class UserBean {
-
 	@Id
 	@Column(name = "user_id")
 	private int userId;
-
+	
 	@Column(name = "user_name")
 	private String userName;
-
-	@Column
-	private String email;
-
+	
+	@Column String email;
+	
 	@Column(name = "phone_number")
 	private long phoneNumber;
-
+	
 	@Column
 	private String nationality;
-
+	
 	@Column
 	private String password;
-
+	
 	@Column
 	private String gender;
-
+	
 	@Column(name = "user_type")
 	private String userType;
 
-    //All getters and setters
 	public int getUserId() {
 		return userId;
 	}
@@ -98,5 +95,9 @@ public class UserBean {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-
+	
+	
+	
+	
+	
 }
