@@ -14,6 +14,7 @@ export class AddhotelComponent implements OnInit {
 
 hotelForm(){
   console.log(this.hotelForm.value);
+  console.log();
 }
 
 

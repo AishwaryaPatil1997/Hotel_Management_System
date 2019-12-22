@@ -9,14 +9,6 @@ export class HeaderComponent implements OnInit {
 
   constructor() { }
 
-  isUserLogin() {
-    const user = JSON.parse(localStorage.getItem('key'));
-    if (user && user.userType === 'user') {
-      return true;
-    } else {
-      return false;
-    }
-  }
   ngOnInit() {
   }
 
