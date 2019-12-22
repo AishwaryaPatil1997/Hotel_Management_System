@@ -12,12 +12,18 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "booking_info")
-public class BookingInfoBean {
+@Table(name = "order_history")
+public class HistoryBean {
 	@Id
 	@Column(name = "booking_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int bookingId;
+	private int orderId;
+	
+	@Column(name = "hotel_id")
+	private int hotelId;
+	
+	@Column(name = "hotel_name")
+	private String hotelName;
 	
 	@Column(name = "room_id")
 	private int roomId;
@@ -43,12 +49,28 @@ public class BookingInfoBean {
 	private LocalDate checkoutDate;
 	
 	// Getters and Setters
-	public int getBookingId() {
-		return bookingId;
+	public int getOrderId() {
+		return orderId;
 	}
 
-	public void setBookingId(int bookingId) {
-		this.bookingId = bookingId;
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
+	}
+
+	public int getHotelId() {
+		return hotelId;
+	}
+
+	public void setHotelId(int hotelId) {
+		this.hotelId = hotelId;
+	}
+
+	public String getHotelName() {
+		return hotelName;
+	}
+
+	public void setHotelName(String hotelName) {
+		this.hotelName = hotelName;
 	}
 
 	public int getRoomId() {
@@ -106,8 +128,5 @@ public class BookingInfoBean {
 	public void setCheckoutDate(LocalDate checkoutDate) {
 		this.checkoutDate = checkoutDate;
 	}
-
-	
-	
 	
 }//End of Class

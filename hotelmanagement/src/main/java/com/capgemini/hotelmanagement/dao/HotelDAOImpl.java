@@ -1,5 +1,4 @@
 package com.capgemini.hotelmanagement.dao;
-
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -17,14 +16,14 @@ public class HotelDAOImpl implements HotelDAO {
 	
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
-	 EntityManager entityManager;
-	 EntityTransaction entityTransaction;  ///----
+	
+	EntityManager entityManager;
 
 	@Override
 	public List<HotelBean> showAllHotels() {
 		List<HotelBean> hotelList = null;
 		entityManager = entityManagerFactory.createEntityManager();
-		entityTransaction = entityManager.getTransaction();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 		String jpql = "from HotelBean";
 		Query query = entityManager.createQuery(jpql);
 		try {
@@ -35,13 +34,13 @@ public class HotelDAOImpl implements HotelDAO {
 			e.printStackTrace();
 		}
 		return hotelList;
-	}
+	}//End of showAllHotels()
 
 	@Override
 	public boolean updateHotelDetails(HotelBean hotelBean) {
 		boolean isUpdated = false;
 		entityManager = entityManagerFactory.createEntityManager();
-		entityTransaction = entityManager.getTransaction();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 		HotelBean hotelBean2 = entityManager.find(HotelBean.class, hotelBean.getHotelId());
 
 		if (hotelBean2 != null) {
@@ -66,7 +65,7 @@ public class HotelDAOImpl implements HotelDAO {
 			entityManager.close();
 		}
 		return isUpdated;
-	}
+	}//End of updateHotelDetails()
 
 	@Override
 	public HotelBean searchHotelDetails(String hotelName) {
@@ -84,13 +83,13 @@ public class HotelDAOImpl implements HotelDAO {
 			e.printStackTrace();
 		}
 		return hotelBean;
-	}
+	}//End of searchHotelDetails()
 
 	@Override
 	public HotelBean getHotelDetails(int hotelId) {
 
 		entityManager = entityManagerFactory.createEntityManager();
-		entityTransaction = entityManager.getTransaction();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 
 		HotelBean hotelBean = null;
 		try {
@@ -102,13 +101,13 @@ public class HotelDAOImpl implements HotelDAO {
 		}
 		entityManager.close();
 		return hotelBean;
-	}
+	}//End of getHotelDetails()
 
 	@Override
 	public boolean addHotelDetails(HotelBean hotelBean) {
 		boolean isHotelAdded = false;
 		entityManager = entityManagerFactory.createEntityManager();
-		entityTransaction = entityManager.getTransaction();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 
 		try {
 			entityTransaction.begin();
@@ -121,7 +120,7 @@ public class HotelDAOImpl implements HotelDAO {
 		}
 		entityManager.close();
 		return isHotelAdded;
-	}
+	}//End of addHotelDetails()
 
 	@Override
 	public boolean deleteHotelDetails(int hotelId) {
@@ -129,7 +128,7 @@ public class HotelDAOImpl implements HotelDAO {
 		entityManager = entityManagerFactory.createEntityManager();
 
 		try {
-			entityTransaction = entityManager.getTransaction();
+			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
 			HotelBean hotelBean = entityManager.find(HotelBean.class, hotelId);
 			entityManager.remove(hotelBean);
@@ -141,5 +140,6 @@ public class HotelDAOImpl implements HotelDAO {
 		}
 		entityManager.close();
 		return isHotelDeleted;
-	}
-}
+	}//End of deleteHotelDetails()
+	
+}// End of Class

@@ -16,15 +16,16 @@ import com.capgemini.hotelmanagement.beans.HotelResponse;
 import com.capgemini.hotelmanagement.service.HotelService;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "true")
+//To connect rest with angular
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HotelController {
-
+	
 	@Autowired
-	private HotelService service;
+	private HotelService hotelService;
 
 	@GetMapping(path = "/showAllHotels")
 	public HotelResponse showAllHotels() {
-		List<HotelBean> hotelList = service.showAllHotels();
+		List<HotelBean> hotelList = hotelService.showAllHotels();
 		HotelResponse hotelResponse = new HotelResponse();
 		if (hotelList != null && !hotelList.isEmpty()) {
 			hotelResponse.setStatusCode(201);
@@ -41,7 +42,7 @@ public class HotelController {
 
 	@GetMapping(path = "/getHotelDetails")
 	public HotelResponse getHotelDetails(int hotelId) {
-		HotelBean hotelBean = service.getHotelDetails(hotelId);
+		HotelBean hotelBean = hotelService.getHotelDetails(hotelId);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (hotelBean != null) {
 			hotelResponse.setStatusCode(201);
@@ -58,7 +59,7 @@ public class HotelController {
 
 	@PostMapping(path = "/addHotel")
 	public HotelResponse addHotel(@RequestBody HotelBean hotelBean) {
-		boolean isAdded = service.addHotelDetails(hotelBean);
+		boolean isAdded = hotelService.addHotelDetails(hotelBean);
 
 		HotelResponse hotelResponse = new HotelResponse();
 		if (isAdded) {
@@ -77,7 +78,7 @@ public class HotelController {
 	@PutMapping(path = "/updateHotelDetails")
 	public HotelResponse updateHotelDetails(@RequestBody HotelBean hotelBean) {
 
-		boolean isUpdated = service.updateHotelDetails(hotelBean);
+		boolean isUpdated = hotelService.updateHotelDetails(hotelBean);
 
 		HotelResponse hotelResponse = new HotelResponse();
 		if (isUpdated) {
@@ -95,7 +96,7 @@ public class HotelController {
 	@DeleteMapping(path = "/deleteHotel")
 	public HotelResponse deleteHotel(int hotelId) {
 
-		boolean isDeleted = service.deleteHotelDetails(hotelId);
+		boolean isDeleted = hotelService.deleteHotelDetails(hotelId);
 		HotelResponse hotelResponse = new HotelResponse();
 
 		if (isDeleted) {
@@ -112,7 +113,7 @@ public class HotelController {
 
 	@PostMapping(path = "/searchHotel")
 	public HotelResponse searchHotel(String hotelName) {
-		HotelBean hotelBean = service.searchHotelDetails(hotelName);
+		HotelBean hotelBean = hotelService.searchHotelDetails(hotelName);
 
 		HotelResponse hotelResponse = new HotelResponse();
 		if (hotelBean != null) {
@@ -126,4 +127,5 @@ public class HotelController {
 		}
 		return hotelResponse;
 	}
-}
+	
+}//End of Class

@@ -1,21 +1,18 @@
 package com.capgemini.hotelmanagement.controller;
 
-import java.util.List;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capgemini.hotelmanagement.beans.BookingInfoBean;
 import com.capgemini.hotelmanagement.beans.HotelResponse;
-import com.capgemini.hotelmanagement.beans.RoomBean;
-import com.capgemini.hotelmanagement.services.UserServices;
+import com.capgemini.hotelmanagement.beans.UserBean;
+import com.capgemini.hotelmanagement.service.UserServices;
 
 @RestController
 //To connect rest with angular
@@ -24,87 +21,84 @@ public class UserController {
 	@Autowired
 	private UserServices userServices;
 	
-	@PostMapping(path = "/bookingRoom",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse userRegistration(@RequestBody BookingInfoBean bookingInfoBean) {
-		boolean isBooked = userServices.bookHotelRoom(bookingInfoBean);
+	@PostMapping(path = "/registerUser",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	public HotelResponse userRegistration(@Valid @RequestBody UserBean userBean) {
+		boolean registerUser = userServices.userRegistration(userBean);
 		HotelResponse hotelResponse = new HotelResponse();
-		if (isBooked) {
+		if (registerUser) {
 			hotelResponse.setStatusCode(201);
 			hotelResponse.setMessage("Success");
-			hotelResponse.setDescription("Booking Successful.......");
+			hotelResponse.setDescription("User Registered.......");
 		} else {
 			hotelResponse.setStatusCode(401);
 			hotelResponse.setMessage("Failed");
-			hotelResponse.setDescription("Failed To booked Room........");
+			hotelResponse.setDescription("User Registration Failed........");
 		}
 		return hotelResponse;
 	}//userRegistration()
 	
-	@GetMapping(path = "/getAvailableRooms", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse showRooms() {
-		List<RoomBean> roomList = userServices.showAvailableRoom();
+	@PostMapping(path = "/userLogin",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	public HotelResponse UsersLogin(@RequestParam("email") String email, @RequestParam("password") String password) {
+		UserBean userLogin = userServices.userLogin(email, password);
 		HotelResponse hotelResponse = new HotelResponse();
-		if (roomList != null) {
+		if (userLogin != null) {
 			hotelResponse.setStatusCode(201);
 			hotelResponse.setMessage("Success");
-			hotelResponse.setRoomList(roomList);
-			hotelResponse.setDescription("Retrieve Available All Rooms.......");
+			hotelResponse.setUserBean(userLogin);
+			hotelResponse.setDescription("Users Logged in........");
 		} else {
 			hotelResponse.setStatusCode(401);
 			hotelResponse.setMessage("Failed");
-			hotelResponse.setDescription("There is No Available Rooms........");
+			hotelResponse.setDescription("User Login Failed........");
 		}
 		return hotelResponse;
-	}//End of showRooms()
+	}//End of UserLogin()
 	
-	@GetMapping(path = "/getBookedRecords")
-	public HotelResponse showBookingDetails(@RequestParam int userId) {
-		List<BookingInfoBean> bookingInfoList = userServices.showBooking(userId);
+	@PostMapping(path = "/updatePassword")
+	public HotelResponse passwordUpdate(@RequestParam int userId, @RequestParam long phoneNumber, @RequestParam String password) {
+		boolean isUpdated = userServices.resetPassword(userId, phoneNumber, password);
 		HotelResponse hotelResponse = new HotelResponse();
-		if (bookingInfoList != null) {
+		if (isUpdated) {
 			hotelResponse.setStatusCode(201);
 			hotelResponse.setMessage("Success");
-			hotelResponse.setBookingInfoList(bookingInfoList);
-			hotelResponse.setDescription("Retrieve All Booking.......");
+			hotelResponse.setDescription("Password Updated Successfully...");
 		} else {
 			hotelResponse.setStatusCode(401);
 			hotelResponse.setMessage("Failed");
-			hotelResponse.setDescription("There is No Booked data Available........");
+			hotelResponse.setDescription("Unable To Update Password...");
 		}
-		return hotelResponse;
-	}//End of showBookingDetails()
+		return hotelResponse;	
+	}//End of passwordUpdate()
 	
-	@DeleteMapping(path = "/cancelBooking")
-	public HotelResponse cancelBooking(@RequestParam int bookingId) {
-		boolean isCancel = userServices.deleteBookedRoom(bookingId);
+	@PostMapping(path = "/updateProfile",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	public HotelResponse updateProfile(@RequestBody UserBean userBean) {
+		boolean isUpdated = userServices.updateProfile(userBean);
 		HotelResponse hotelResponse = new HotelResponse();
-		if (isCancel) {
+		if (isUpdated) {
 			hotelResponse.setStatusCode(201);
 			hotelResponse.setMessage("Success");
-			hotelResponse.setDescription("Cancel Booking Successfully.......");
+			hotelResponse.setDescription("Profile Updated Successfully...");
 		} else {
 			hotelResponse.setStatusCode(401);
 			hotelResponse.setMessage("Failed");
-			hotelResponse.setDescription("Unable to Cancel Booking........");
+			hotelResponse.setDescription("Unable To Update Profile...");
 		}
 		return hotelResponse;
-	}//End of deleteBooking
+	}//End of updateProfile()
 	
-	@GetMapping(path = "/totalAmount")
-	public HotelResponse totalBill(@RequestParam int userId) {
-		double totalBill = userServices.totalBill(userId);
+	public HotelResponse showProfile(@RequestParam int userId) {
+		UserBean userBean = userServices.showProfile(userId);
 		HotelResponse hotelResponse = new HotelResponse();
-		if (totalBill > 0.0) {
+		if (userBean != null) {
 			hotelResponse.setStatusCode(201);
 			hotelResponse.setMessage("Success");
-			hotelResponse.setTotalAmount(totalBill);
-			hotelResponse.setDescription("Amount Calculated Successfully.......");
+			hotelResponse.setUserBean(userBean);
+			hotelResponse.setDescription("Profile Retrived Successfully...");
 		} else {
 			hotelResponse.setStatusCode(401);
 			hotelResponse.setMessage("Failed");
-			hotelResponse.setDescription("Unable To Calculate Total Amount........");
+			hotelResponse.setDescription("Unable To Retrive Profile...");
 		}
 		return hotelResponse;
-	}//End of totalBill()
-
+	}//End of showProfile()
 }//End of Class
