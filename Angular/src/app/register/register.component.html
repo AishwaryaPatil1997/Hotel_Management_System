@@ -1,20 +1,21 @@
 <div class="container">
-    <div class="card col-md-6 col-6 col-sm-6 col-lg-6 offset-3 mt-3 ">
+    <div class="card col-md-6 col-6 col-sm-6 col-lg-6 offset-3 mt-5 ">
         <div class="card-body">
             <fieldset>
                 <legend>Registration Form</legend>
-                <form  #registerForm='ngForm' (ngSubmit)='printForm(registerForm)'>
+                <form #registerForm='ngForm' (ngSubmit)='printForm(registerForm)'>
                     <div class="form-group">
                         <label for="userName">Name : </label>
-                        <input type="text" name="userName" #userName='ngModel' ngModel userName class="form-control" placeholder="userName">
+                        <input type="text" name="userName" #userName='ngModel' ngModel required userName
+                            class="form-control" placeholder="Enter Name">
                     </div>
                     <div *ngIf='userName.touched && userName.invalid'>
                         <p class="alert alert-danger" *ngIf='userName.errors.required'>This Field is Mandatory</p>
                     </div>
                     <div class="form-group">
                         <label for="email">Email : </label>
-                        <input type="email" name="email" required minlength="8" #email='ngModel' ngModel  email class="form-control"
-                            placeholder="Enter Email">
+                        <input type="email" name="email" #email='ngModel' ngModel required minlength="8" email
+                            class="form-control" placeholder="Enter Email">
                     </div>
                     <div *ngIf='email.touched && email.invalid'>
                         <p class="alert alert-danger" *ngIf='email.errors.required'>This Field is Mandatory</p>
@@ -22,33 +23,22 @@
                         <p class="alert alert-danger" *ngIf='email.errors.email'>Accept only Email</p>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password : </label>
-                        <input type="password" name="password" required minlength="8" #password='ngModel' password ngModel
-                            class="form-control" placeholder="Enter userPassword">
+                        <label for="password">User Password : </label>
+                        <input type="Password" name="password" #password='ngModel' ngModel required minlength="8"
+                            password class="form-control" placeholder="Enter userPassword">
                     </div>
                     <div *ngIf='password.touched && password.invalid'>
                         <p class="alert alert-danger" *ngIf='password.errors'>This Field is Mandatory</p>
                         <p class="alert alert-danger" *ngIf='password.validator.length'>Minimum Length is 8</p>
                     </div>
                     <div class="form-group">
-                        <label for="phoneNumber">phoneNumber : </label>
-                        <input type="text" name="phoneNumber" #phoneNumber='ngModel' phoneNumber ngModel required class="form-control"
-                            placeholder="phoneNumber">
+                        <label for="phoneNumber">Phone Number : </label>
+                        <input type="text" pattern="[0-9]{10}" name="phoneNumber" #phoneNumber='ngModel' ngModel
+                            required  phoneNumber class="form-control" placeholder="Enter Your Number">
                     </div>
                     <div *ngIf='phoneNumber.touched && phoneNumber.invalid'>
-                        <p class="alert alert-danger" *ngIf ='phoneNumber.errors.pattern'>phoneNumber must be 10 digit numeric
-                            value
-                        </p>
-                        <p class="alert alert-danger" *ngIf ='phoneNumber.errors.required'>This Field is Mandatory</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="gender">Gender : </label><br>
-                        <input type="radio" name="gender" id="Male">Male
-                        <input type="radio" name="gender" id="Female">Female
-                        <input type="radio" name="gender" id="Other">Others
-                    </div>
-                    <div *ngIf='gender.touched && gender.invalid'>
-                        <p class="alert alert-danger" *ngIf='gender.errors.required'>This Field is Mandatory</p>
+                        <p class="alert alert-danger" *ngIf='phoneNumber.errors.pattern'>Accept only 10 digits</p>
+                        <p class="alert alert-danger" *ngIf='phoneNumber.errors.required'>This field is required</p>
                     </div>
                     <div>
                         <label for="nationality">Nationality :</label><br>
@@ -249,7 +239,13 @@
                         </select>
                     </div>
                     <br>
-                    <button class="btn btn-outline-primary" [disabled]='registerForm.invalid'>
+                    <div class="form-group">
+                        <label for="gender">Gender : </label><br>
+                        <input type="radio" name="gender" id="Male">Male
+                        <input type="radio" name="gender" id="Female">Female
+                        <input type="radio" name="gender" id="Other">Others
+                    </div>
+                    <button class="btn btn-outline-primary" type="submit" [disabled]='registerForm.invalid'>
                         Register
                     </button>
                 </form>

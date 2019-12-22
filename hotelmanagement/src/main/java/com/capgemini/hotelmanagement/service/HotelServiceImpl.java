@@ -10,7 +10,7 @@ import com.capgemini.hotelmanagement.dao.HotelDAO;
 
 @Service
 public class HotelServiceImpl implements HotelService {
-
+	
 	@Autowired
 	private HotelDAO hotelDAO;
 
@@ -43,5 +43,6 @@ public class HotelServiceImpl implements HotelService {
 	public boolean deleteHotelDetails(int hotelId) {
 		return hotelDAO.deleteHotelDetails(hotelId);
 	}
-
-}
+	
+	
+}//End of Class

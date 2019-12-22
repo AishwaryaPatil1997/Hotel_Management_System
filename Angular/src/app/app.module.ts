@@ -12,6 +12,7 @@ import { RegisterComponent } from './register/register.component';
 import { from } from 'rxjs';
 import { AddroomComponent } from './addroom/addroom.component';
 import { AddhotelComponent } from './addhotel/addhotel.component';
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { AddhotelComponent } from './addhotel/addhotel.component';
     LoginComponent,
     RegisterComponent,
     AddroomComponent,
-    AddhotelComponent
+    AddhotelComponent,
+    PagenotfoundComponent
   ],
   imports: [
     BrowserModule,

@@ -2,8 +2,12 @@ package com.capgemini.hotelmanagement.beans;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "user")
@@ -11,21 +15,29 @@ public class UserBean {
 
 	@Id
 	@Column(name = "user_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int userId;
 
 	@Column(name = "user_name")
+	@NotBlank(message = "Name cannot be empty...")
 	private String userName;
 
 	@Column
+	@Pattern(regexp = "^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$", message = "Email should be valid...")
+//	@Email(message = "Email should be valid...")
 	private String email;
 
 	@Column(name = "phone_number")
+//	@Pattern(regexp = "[6-9]{1}[0-9]{9}", message = "Phone number should be of 10 digits only...")
+//	@Size(min = 10, max = 10, message = "Phone number should be of 10 digits only...")
 	private long phoneNumber;
 
 	@Column
+	@NotBlank(message = "Nationality cannot be empty...")
 	private String nationality;
 
 	@Column
+	@Pattern(regexp = "^(?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9])(?=\\S*?[^\\w\\*])\\S{8,}$", message = "Password should contain 1 lowercase character, 1 uppercase character, digits from 0-9, atleast one special character from '@#$%', minimum Length of password should be 8.")
 	private String password;
 
 	@Column
@@ -34,7 +46,7 @@ public class UserBean {
 	@Column(name = "user_type")
 	private String userType;
 
-    //All getters and setters
+	// Getters and Setters
 	public int getUserId() {
 		return userId;
 	}
