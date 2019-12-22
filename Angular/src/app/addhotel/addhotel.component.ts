@@ -12,7 +12,9 @@ export class AddhotelComponent implements OnInit {
   
   constructor(private router: Router,private hotel:HotelService) { }
 
-
+hotelForm(){
+  
+}
 
 
   ngOnInit() {
