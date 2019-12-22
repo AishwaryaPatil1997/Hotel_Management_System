@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.capgemini.hotelmanagement.beans.HistoryBean;
 import com.capgemini.hotelmanagement.beans.HotelBean;
-import com.capgemini.hotelmanagement.beans.UserBean;
 
 @Repository
 public class HistoryDAOImpl implements HistoryDAO {
@@ -51,7 +50,7 @@ public class HistoryDAOImpl implements HistoryDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return historyList;
 	}// End of showOrder()
-
+	
 }// End of Class
