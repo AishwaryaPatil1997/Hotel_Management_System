@@ -7,7 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddhotelComponent implements OnInit {
 
+  hotels: Hotel[];
+  
   constructor() { }
+
+
+
 
   ngOnInit() {
   }

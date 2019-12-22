@@ -16,4 +16,27 @@ export class HotelService {
   userRegister(data: any) {
     return this.http.post<any>(`http://localhost:8080/registerUser`, data);
   }
+
+
+  addhotel(data: any){
+    return this.http.post<any>(`http://localhost:8080/addHotel`,data);
+  }
+
+  deleteHotel(data:any){
+    return this.http.delete<any>(`http://localhost:8080/deleteHotel`,data);
+  }
+
+
+  updateHotelDetails(data:any){
+    return this.http.post<any>(`http://localhost:8080/updateHotelDetails`,data);
+  }
+
+  searchHotel(data:any){
+    return this.http.post<any>(`http://localhost:8080/searchHotel`,data);
+  }
+
+  getHotelDetails(data:any){
+    return this.http.get(`http://localhost:8080/getHotelDetails`,data);
+  }
+
 }

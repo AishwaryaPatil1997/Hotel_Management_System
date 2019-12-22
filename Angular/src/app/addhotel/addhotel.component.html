@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="card col-md-6 col-6 col-sm-6 col-lg-6 offset-3 mt-5 ">
+        <div class="card-body">
+            <fieldset>
+                <legend>Hotel Form</legend>
+                 <form  #hotelForm='ngForm' (ngSubmit)='printForm(hotelForm)'>
+                        <div class="form-group">
+                            <label for="hotelName">Name : </label>
+                            <input type="text" name="hotelName" #hotelName='ngModel' ngModel hotelName class="form-control" placeholder="hotelName">
+                        </div>
+                        <div *ngIf='hotelName.touched && hotelName.invalid'>
+                            <p class="alert alert-danger" *ngIf='hotelName.errors.required'>This Field is Mandatory</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">Location : </label>
+                            <input type="text" name="location" #location='ngModel' ngModel location class="form-control" placeholder="location">
+                        </div>
+                        <div *ngIf='location.touched && location.invalid'>
+                            <p class="alert alert-danger" *ngIf='location.errors.required'>This Field is Mandatory</p>
+                        </div>
+
+
+                        <div>
+                            <label for="available">Available :</label><br>
+                            <select name="available" id="available" #available='ngModel' available ngModel required class="form-control">
+                                <option value="" selected disabled>Select</option>
+                                <option value="afghan">Yes</option>
+                                <option value="afghan">No</option>
+                                </select>
+                        </div>
+
+                    <button class="btn btn-outline-primary" type="submit" (click)="addHotel()">
+                        ADD Hotel
+                    </button>
+                </form>
+            </fieldset>
+        </div>
+    </div>
+</div>
