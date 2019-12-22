@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HotelService } from '../hotel.service';
 
 @Component({
   selector: 'app-addhotel',
@@ -9,7 +10,7 @@ export class AddhotelComponent implements OnInit {
 
   hotels: Hotel[];
   
-  constructor() { }
+  constructor(private router: Router,private hotel:HotelService) { }
 
 
 
