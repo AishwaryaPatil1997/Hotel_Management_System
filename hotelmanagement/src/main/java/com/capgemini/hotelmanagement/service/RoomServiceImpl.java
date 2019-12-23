@@ -6,42 +6,53 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.hotelmanagement.beans.BookingInfoBean;
+import com.capgemini.hotelmanagement.beans.HistoryBean;
 import com.capgemini.hotelmanagement.beans.RoomBean;
 import com.capgemini.hotelmanagement.dao.RoomDAO;
 
 @Service
-public class RoomServicesImpl implements RoomServices {
-	
+public class RoomServiceImpl implements RoomService{
+
 	@Autowired
-	private RoomDAO userDAO;
-	
+	private RoomDAO roomDAO;
+
 	@Override
 	public boolean bookHotelRoom(BookingInfoBean bookingInfoBean) {
-		return userDAO.bookHotelRoom(bookingInfoBean);
+		return roomDAO.bookHotelRoom(bookingInfoBean);
 	}
 
 	@Override
 	public boolean checkRoomStatus(int roomId) {
-		return userDAO.checkRoomStatus(roomId);
+		return roomDAO.checkRoomStatus(roomId);
 	}
 
 	@Override
 	public List<RoomBean> showAvailableRoom(String roomType) {
-		return userDAO.showAvailableRoom(roomType);
+		return roomDAO.showAvailableRoom(roomType);
 	}
 
 	@Override
 	public List<BookingInfoBean> showBooking(int userId) {
-		return userDAO.showBooking(userId);
+		return roomDAO.showBooking(userId);
 	}
 
 	@Override
 	public boolean cancelBooking(int bookingId) {
-		return userDAO.cancelBooking(bookingId);
+		return roomDAO.cancelBooking(bookingId);
 	}
 
 	@Override
 	public double totalBill(int userId) {
-		return userDAO.totalBill(userId);
+		return roomDAO.totalBill(userId);
 	}
-}//End of Class
+
+	@Override
+	public boolean saveHistory(HistoryBean historyBean) {
+		return roomDAO.saveHistory(historyBean);
+	}
+
+	@Override
+	public List<HistoryBean> showHistory(int userId) {
+		return roomDAO.showHistory(userId);
+	}
+}// End of Class

@@ -1,3 +1,4 @@
+
 package com.capgemini.hotelmanagement.dao;
 
 import javax.persistence.EntityManager;
@@ -12,10 +13,9 @@ import com.capgemini.hotelmanagement.beans.UserBean;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
-	
+
 	@PersistenceUnit
 	private EntityManagerFactory entityManagerFactory;
-
 	EntityManager entityManager;
 
 	@Override
@@ -160,6 +160,6 @@ public class UserDAOImpl implements UserDAO {
 			e.printStackTrace();
 		}
 		return userBean;
-	}//End of showProfile()
+	}// End of showProfile()
 
-}//End of Class
+}// End of Class

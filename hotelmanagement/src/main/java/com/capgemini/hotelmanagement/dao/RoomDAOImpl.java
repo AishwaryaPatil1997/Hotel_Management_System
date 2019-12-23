@@ -13,6 +13,8 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.capgemini.hotelmanagement.beans.BookingInfoBean;
+import com.capgemini.hotelmanagement.beans.HistoryBean;
+import com.capgemini.hotelmanagement.beans.HotelBean;
 import com.capgemini.hotelmanagement.beans.RoomBean;
 
 @Repository
@@ -33,8 +35,11 @@ public class RoomDAOImpl implements RoomDAO {
 			// Checking room is available or not
 			boolean isPresent = checkRoomStatus(bookingInfoBean.getRoomId());
 			if (isPresent) {
+				// HotelBean hotelBean = entityManager.find(HotelBean.class,
+				// bookingInfoBean.getHotelId());
 				RoomBean roomBean = entityManager.find(RoomBean.class, bookingInfoBean.getRoomId());
 				double roomRent = roomBean.getRoomRent();
+				bookingInfoBean.setHotelId(roomBean.getHotelId());
 
 				// Calculating days between checkin and checkout days
 				int days = calculateDays(bookingInfoBean.getCheckinDate(), bookingInfoBean.getCheckoutDate());
@@ -48,6 +53,22 @@ public class RoomDAOImpl implements RoomDAO {
 				isBooked = true;
 				if (isBooked) {
 					roomBean.setRoomStatus("Unavailable");
+					if (bookingInfoBean.getPaymentStatus().equals("Done")) {
+						HistoryBean historyBean = new HistoryBean();
+						int hotelId = roomBean.getHotelId();
+						historyBean.setHotelId(hotelId);
+						HotelBean hotelBean = entityManager.find(HotelBean.class, hotelId);
+						// Getting hotel id and hotel name
+						historyBean.setHotelName(hotelBean.getHotelName());
+						historyBean.setRoomId(bookingInfoBean.getRoomId());
+						historyBean.setUserId(bookingInfoBean.getUserId());
+						historyBean.setAmount(totalAmount);
+						historyBean.setPaymentStatus(bookingInfoBean.getPaymentStatus());
+						historyBean.setModeOfPayment(bookingInfoBean.getModeOfPayment());
+						historyBean.setCheckinDate(bookingInfoBean.getCheckinDate());
+						historyBean.setCheckoutDate(bookingInfoBean.getCheckoutDate());
+						saveHistory(historyBean);
+					}
 				}
 				entityTransaction.commit();
 			}
@@ -155,4 +176,67 @@ public class RoomDAOImpl implements RoomDAO {
 		return daysBetween;
 	}// End of calculateDays()
 
-}// End of Class
+	@Override
+	public boolean saveHistory(HistoryBean historyBean) {
+		entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		boolean isAdded = false;
+		try {
+			entityTransaction.begin();
+			entityManager.persist(historyBean);
+			entityTransaction.commit();
+			isAdded = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return isAdded;
+	}// End of saveHistory
+
+	@Override
+	public List<HistoryBean> showHistory(int userId) {
+		entityManager = entityManagerFactory.createEntityManager();
+		List<HistoryBean> historyList = null;
+		try {
+			historyList = (List<HistoryBean>) entityManager.find(HistoryBean.class, userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return historyList;
+	}// End of showOrder()
+
+	@Override
+	public List<RoomBean> showAllRooms() {
+		entityManager = entityManagerFactory.createEntityManager();
+		List<RoomBean> roomList = null;
+		try {
+			String jpql = "FROM RoomBean WHERE roomType =: roomType";
+			Query query = entityManager.createQuery(jpql);
+			roomList = query.getResultList();
+			entityManager.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return roomList;
+	}
+
+	@Override
+	public boolean addNewRoom(RoomBean roomBean) {
+		boolean isRoomAdded = false;
+		entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+
+		try {
+			entityTransaction.begin();
+			entityManager.persist(roomBean);
+			entityTransaction.commit();
+			isRoomAdded = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		entityManager.close();
+		return isRoomAdded;
+	}
+
+}
