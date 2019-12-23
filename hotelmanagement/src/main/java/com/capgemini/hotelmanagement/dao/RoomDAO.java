@@ -30,5 +30,7 @@ public interface RoomDAO {
 	public List<RoomBean> showAllRooms();
 
 	public boolean addNewRoom(RoomBean roomBean);
+	
+	public boolean deleteRoom(int roomId);
 
 }

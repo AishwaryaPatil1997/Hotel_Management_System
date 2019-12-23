@@ -23,4 +23,10 @@ public interface RoomService {
 
 	public List<HistoryBean> showHistory(int userId);
 
+	public List<RoomBean> showAllRooms();
+
+	public boolean addNewRoom(RoomBean roomBean);
+	
+	public boolean deleteRoom(int roomId);
+
 }// End of interface

@@ -11,7 +11,7 @@ import com.capgemini.hotelmanagement.beans.RoomBean;
 import com.capgemini.hotelmanagement.dao.RoomDAO;
 
 @Service
-public class RoomServiceImpl implements RoomService{
+public class RoomServiceImpl implements RoomService {
 
 	@Autowired
 	private RoomDAO roomDAO;
@@ -55,4 +55,20 @@ public class RoomServiceImpl implements RoomService{
 	public List<HistoryBean> showHistory(int userId) {
 		return roomDAO.showHistory(userId);
 	}
+
+	@Override
+	public List<RoomBean> showAllRooms() {
+		return roomDAO.showAllRooms();
+	}
+
+	@Override
+	public boolean addNewRoom(RoomBean roomBean) {
+		return roomDAO.addNewRoom(roomBean);
+	}
+
+	@Override
+	public boolean deleteRoom(int roomId) {
+		return roomDAO.deleteRoom(roomId);
+	}
+
 }// End of Class

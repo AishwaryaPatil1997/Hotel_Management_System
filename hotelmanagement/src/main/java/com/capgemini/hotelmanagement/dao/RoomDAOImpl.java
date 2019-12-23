@@ -210,7 +210,7 @@ public class RoomDAOImpl implements RoomDAO {
 		entityManager = entityManagerFactory.createEntityManager();
 		List<RoomBean> roomList = null;
 		try {
-			String jpql = "FROM RoomBean WHERE roomType =: roomType";
+			String jpql = "FROM RoomBean";
 			Query query = entityManager.createQuery(jpql);
 			roomList = query.getResultList();
 			entityManager.close();
@@ -239,4 +239,22 @@ public class RoomDAOImpl implements RoomDAO {
 		return isRoomAdded;
 	}
 
+	@Override
+	public boolean deleteRoom(int roomId) {
+		boolean isRoomDeleted = false;
+		entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		try {
+			entityTransaction.begin();
+			RoomBean roomBean = entityManager.find(RoomBean.class, roomId);
+			entityManager.remove(roomBean);
+			entityTransaction.commit();
+			isRoomDeleted = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		entityManager.close();
+		return isRoomDeleted;
+	}
 }
