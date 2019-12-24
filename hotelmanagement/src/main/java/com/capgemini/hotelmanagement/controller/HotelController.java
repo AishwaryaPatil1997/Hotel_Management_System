@@ -2,8 +2,6 @@ package com.capgemini.hotelmanagement.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +19,7 @@ import com.capgemini.hotelmanagement.service.HotelService;
 //To connect rest with angular
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HotelController {
-
+	
 	@Autowired
 	private HotelService hotelService;
 
@@ -43,7 +41,7 @@ public class HotelController {
 	}
 
 	@GetMapping(path = "/getHotelDetails")
-	public HotelResponse getHotelDetails(@Valid int hotelId) {
+	public HotelResponse getHotelDetails(int hotelId) {
 		HotelBean hotelBean = hotelService.getHotelDetails(hotelId);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (hotelBean != null) {
@@ -60,7 +58,7 @@ public class HotelController {
 	}
 
 	@PostMapping(path = "/addHotel")
-	public HotelResponse addHotel(@Valid @RequestBody HotelBean hotelBean) {
+	public HotelResponse addHotel(@RequestBody HotelBean hotelBean) {
 		boolean isAdded = hotelService.addHotelDetails(hotelBean);
 
 		HotelResponse hotelResponse = new HotelResponse();
@@ -78,7 +76,7 @@ public class HotelController {
 	}
 
 	@PutMapping(path = "/updateHotelDetails")
-	public HotelResponse updateHotelDetails(@Valid @RequestBody HotelBean hotelBean) {
+	public HotelResponse updateHotelDetails(@RequestBody HotelBean hotelBean) {
 
 		boolean isUpdated = hotelService.updateHotelDetails(hotelBean);
 
@@ -96,7 +94,7 @@ public class HotelController {
 	}
 
 	@DeleteMapping(path = "/deleteHotel")
-	public HotelResponse deleteHotel(@Valid int hotelId) {
+	public HotelResponse deleteHotel(int hotelId) {
 
 		boolean isDeleted = hotelService.deleteHotelDetails(hotelId);
 		HotelResponse hotelResponse = new HotelResponse();
@@ -114,7 +112,7 @@ public class HotelController {
 	}
 
 	@PostMapping(path = "/searchHotel")
-	public HotelResponse searchHotel(@Valid String hotelName) {
+	public HotelResponse searchHotel(String hotelName) {
 		HotelBean hotelBean = hotelService.searchHotelDetails(hotelName);
 
 		HotelResponse hotelResponse = new HotelResponse();
@@ -129,5 +127,5 @@ public class HotelController {
 		}
 		return hotelResponse;
 	}
-
-}// End of Class
+	
+}//End of Class

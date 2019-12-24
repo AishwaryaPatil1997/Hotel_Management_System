@@ -1,10 +1,13 @@
 package com.capgemini.hotelmanagement.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,19 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.hotelmanagement.beans.HotelResponse;
 import com.capgemini.hotelmanagement.beans.UserBean;
-import com.capgemini.hotelmanagement.service.UserServices;
+import com.capgemini.hotelmanagement.exceptions.HotelException;
+import com.capgemini.hotelmanagement.service.UserService;
 
 @RestController
 //To connect rest with angular
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 	@Autowired
-	private UserServices userServices;
+	private UserService userServices;
 
 	@PostMapping(path = "/registerUser", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public HotelResponse userRegistration(@Valid @RequestBody UserBean userBean) {
-		boolean registerUser = userServices.userRegistration(userBean);
 		HotelResponse hotelResponse = new HotelResponse();
+
+		boolean registerUser = userServices.userRegistration(userBean);
 		if (registerUser) {
 			hotelResponse.setStatusCode(201);
 			hotelResponse.setMessage("Success");
@@ -39,8 +44,7 @@ public class UserController {
 	}// userRegistration()
 
 	@PostMapping(path = "/userLogin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse UsersLogin(@Valid @RequestParam String email,
-			@Valid @RequestParam String password) {
+	public HotelResponse UsersLogin(@RequestParam("email") String email, @RequestParam("password") String password) {
 		UserBean userLogin = userServices.userLogin(email, password);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (userLogin != null) {
@@ -57,8 +61,8 @@ public class UserController {
 	}// End of UserLogin()
 
 	@PostMapping(path = "/updatePassword")
-	public HotelResponse passwordUpdate(@Valid @RequestParam int userId, @Valid @RequestParam long phoneNumber,
-			@Valid @RequestParam String password) {
+	public HotelResponse passwordUpdate(@RequestParam int userId, @RequestParam long phoneNumber,
+			@RequestParam String password) {
 		boolean isUpdated = userServices.resetPassword(userId, phoneNumber, password);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (isUpdated) {
@@ -74,7 +78,7 @@ public class UserController {
 	}// End of passwordUpdate()
 
 	@PostMapping(path = "/updateProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public HotelResponse updateProfile(@Valid @RequestBody UserBean userBean) {
+	public HotelResponse updateProfile(@RequestBody UserBean userBean) {
 		boolean isUpdated = userServices.updateProfile(userBean);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (isUpdated) {
@@ -90,7 +94,7 @@ public class UserController {
 	}// End of updateProfile()
 
 	@GetMapping(path = "/showProfile")
-	public HotelResponse showProfile(@Valid @RequestParam int userId) {
+	public HotelResponse showProfile(@RequestParam int userId) {
 		UserBean userBean = userServices.showProfile(userId);
 		HotelResponse hotelResponse = new HotelResponse();
 		if (userBean != null) {
@@ -101,8 +105,58 @@ public class UserController {
 		} else {
 			hotelResponse.setStatusCode(401);
 			hotelResponse.setMessage("Failed");
-			hotelResponse.setDescription("Unable To Retrieve Profile...");
+			hotelResponse.setDescription("Unable To Retrive Profile...");
 		}
 		return hotelResponse;
 	}// End of showProfile()
+
+	@GetMapping(path = "/showAdmin")
+	public HotelResponse showAdminList() {
+		List<UserBean> adminList = userServices.showAdmin();
+		HotelResponse hotelResponse = new HotelResponse();
+		if (adminList != null) {
+			hotelResponse.setStatusCode(201);
+			hotelResponse.setMessage("Success");
+			hotelResponse.setUserList(adminList);
+			hotelResponse.setDescription("Admin List Retrived Successfully...");
+		} else {
+			hotelResponse.setStatusCode(401);
+			hotelResponse.setMessage("Failed");
+			hotelResponse.setDescription("Unable To Retrive Admin List...");
+		}
+		return hotelResponse;
+	}// End of showAdminList()
+
+	@GetMapping(path = "/showUser")
+	public HotelResponse showUserList() {
+		List<UserBean> userList = userServices.showUser();
+		HotelResponse hotelResponse = new HotelResponse();
+		if (userList != null) {
+			hotelResponse.setStatusCode(201);
+			hotelResponse.setMessage("Success");
+			hotelResponse.setUserList(userList);
+			hotelResponse.setDescription("User List Retrived Successfully...");
+		} else {
+			hotelResponse.setStatusCode(401);
+			hotelResponse.setMessage("Failed");
+			hotelResponse.setDescription("Unable To Retrive User List...");
+		}
+		return hotelResponse;
+	}// End of showUserList()
+
+	@DeleteMapping(path = "/deleteUser")
+	public HotelResponse removeUser(@RequestParam int userId) {
+		boolean isDeleted = userServices.removeUser(userId);
+		HotelResponse hotelResponse = new HotelResponse();
+		if (isDeleted) {
+			hotelResponse.setStatusCode(201);
+			hotelResponse.setMessage("Success");
+			hotelResponse.setDescription("User Deleted Successfully...");
+		} else {
+			hotelResponse.setStatusCode(401);
+			hotelResponse.setMessage("Failed");
+			hotelResponse.setDescription("Unable To Delete User...");
+		}
+		return hotelResponse;
+	}// End of removeUser()
 }// End of Class

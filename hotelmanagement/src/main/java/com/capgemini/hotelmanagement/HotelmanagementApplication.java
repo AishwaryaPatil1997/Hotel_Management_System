@@ -1,3 +1,4 @@
+
 package com.capgemini.hotelmanagement;
 
 import org.springframework.boot.SpringApplication;

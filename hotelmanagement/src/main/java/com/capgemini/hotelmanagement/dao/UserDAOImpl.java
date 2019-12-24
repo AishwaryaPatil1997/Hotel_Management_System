@@ -1,10 +1,13 @@
 package com.capgemini.hotelmanagement.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
+import javax.transaction.Transaction;
 
 import org.springframework.stereotype.Repository;
 
@@ -161,5 +164,70 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return userBean;
 	}//End of showProfile()
+	
+	@Override
+	public List<UserBean> showAdmin() {
+		entityManager = entityManagerFactory.createEntityManager();
+		List<UserBean> adminList = null;
+		try {
+			String userType = "Admin";
+			String jpql = "FROM UserBean WHERE userType =: userType";
+			Query query = entityManager.createQuery(jpql);
+			query.setParameter("userType", userType);
+			adminList = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return adminList;
+	}//End of showAdmin()
+
+	@Override
+	public List<UserBean> showUser() {
+		entityManager = entityManagerFactory.createEntityManager();
+		List<UserBean> userList = null;
+				
+		try {
+			String userType = "User";
+			String jpql = "FROM UserBean WHERE userType =: userType";
+			Query query = entityManager.createQuery(jpql);
+			query.setParameter("userType", userType);
+			userList = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userList;
+	}//End of showUser()
+
+	@Override
+	public boolean removeUser(int userId) {
+		entityManager = entityManagerFactory.createEntityManager();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		boolean isDeleted = false;
+		try {
+			entityTransaction.begin();
+			UserBean userBean = entityManager.find(UserBean.class, userId);
+			entityManager.remove(userBean);
+			isDeleted = true;
+			entityTransaction.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return isDeleted;
+	}//End of removeUser()
+
+	@Override
+	public UserBean emailPresent(String email) {
+		entityManager = entityManagerFactory.createEntityManager();
+		UserBean userBean = null;
+		try {
+			String jpql = "FROM UserBean Where email =: email";
+			Query query = entityManager.createQuery(jpql);
+			query.setParameter("email", email);
+			userBean = (UserBean) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userBean;
+	}//End of emailPresent()
 
 }//End of Class

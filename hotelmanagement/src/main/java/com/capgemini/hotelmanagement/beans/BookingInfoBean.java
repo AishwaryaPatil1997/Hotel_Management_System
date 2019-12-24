@@ -8,14 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "booking_info")
 public class BookingInfoBean {
-	
 	@Id
 	@Column(name = "booking_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,11 +32,9 @@ public class BookingInfoBean {
 	private double amount;
 	
 	@Column(name = "payment_status")
-	@NotBlank(message = "Payment status cannot be empty...")
 	private String paymentStatus;
 	
 	@Column(name = "mode_of_payment")
-	@NotBlank(message = "Please select the mode of payment...")
 	private String modeOfPayment;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd")

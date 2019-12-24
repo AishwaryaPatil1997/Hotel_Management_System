@@ -1,13 +1,18 @@
 package com.capgemini.hotelmanagement.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.hotelmanagement.beans.UserBean;
 import com.capgemini.hotelmanagement.dao.UserDAO;
+import com.capgemini.hotelmanagement.exceptions.ExceptionMethods;
+import com.capgemini.hotelmanagement.exceptions.HotelException;
 
 @Service
 public class UserServiceImpl implements UserService {
+	
 	@Autowired
 	private UserDAO userDAO;
 
@@ -17,8 +22,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserBean userLogin(String userName, String password) {
-		return userDAO.userLogin(userName, password);
+	public UserBean userLogin(String email, String password) {
+		return userDAO.userLogin(email, password);
 	}
 
 	@Override
@@ -36,4 +41,25 @@ public class UserServiceImpl implements UserService {
 		return userDAO.showProfile(userId);
 	}
 
-}// End of Class
+	@Override
+	public List<UserBean> showAdmin() {
+		return userDAO.showAdmin();
+	}
+
+	@Override
+	public List<UserBean> showUser() {
+		return userDAO.showUser();
+	}
+
+	@Override
+	public boolean removeUser(int userId) {
+		return userDAO.removeUser(userId);
+	}
+
+	@Override
+	public UserBean emailPresent(String email) {
+		return userDAO.emailPresent(email);
+	}
+
+
+}//End of Class
